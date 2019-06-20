@@ -7,7 +7,6 @@ function createMuiTheme(options = {}) {
   } = options;
 
   const muiTheme = {
-
   }
 
   return muiTheme;
