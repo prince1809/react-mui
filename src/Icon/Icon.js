@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import withStyles from '../styles/withStyles';
 import clsx from 'clsx';
+import { capitalize } from '../utils/helpers';
 
 export const styles = theme => ({
   root: {
@@ -17,7 +18,10 @@ export const styles = theme => ({
   },
   colorSecondary: {
     color: theme.palette.secondary.main,
-  }
+  },
+  colorError: {
+    color: theme.palette.error.main,
+  },
 });
 
 
@@ -30,15 +34,15 @@ const Icon = React.forwardRef(function Icon(props, ref) {
     fontSize = 'default',
     ...other
   } = props;
-  console.log(classes);
+
   return (
     <Component
       className={clsx(
         'material-icons',
         classes.root,
         {
-          [classes[`color${color}`]]: color !== 'inherit',
-          [classes[`fontSize${fontSize}`]]: fontSize !== 'default',
+          [classes[`color${capitalize(color)}`]]: color !== 'inherit',
+          [classes[`fontSize${capitalize(fontSize)}`]]: fontSize !== 'default',
         },
         className,
       )}
