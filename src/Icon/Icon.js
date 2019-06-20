@@ -12,7 +12,12 @@ export const styles = theme => ({
     overflow: 'hidden',
     flexShrink: 0,
   },
-  colorPrimary: {}
+  colorPrimary: {
+    color: theme.palette.primary.main,
+  },
+  colorSecondary: {
+    color: theme.palette.secondary.main,
+  }
 });
 
 
