@@ -7,7 +7,7 @@ import { capitalize } from '../utils/helpers';
 export const styles = theme => ({
   root: {
     userSelect: 'none',
-    //fontSize: theme.typography.pxToRem(24),
+    fontSize: theme.typography.pxToRem(24),
     width: '1em',
     height: '1em',
     overflow: 'hidden',
