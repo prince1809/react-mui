@@ -19,8 +19,23 @@ export const styles = theme => ({
   colorSecondary: {
     color: theme.palette.secondary.main,
   },
+  colorAction: {
+    color: theme.palette.action.active,
+  },
   colorError: {
     color: theme.palette.error.main,
+  },
+  colorDisabled: {
+    colot: theme.palette.action.disabled,
+  },
+  fontSizeInherit: {
+    fontSize: 'inherit',
+  },
+  fontSizeSmall: {
+    fontSize: theme.typography.pxToRem(20),
+  },
+  fontSizeLarge: {
+    fontSize: theme.typography.pxToRem(36),
   },
 });
 
