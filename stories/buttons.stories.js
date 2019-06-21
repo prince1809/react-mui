@@ -47,6 +47,6 @@ const ContainedButtons = withStyles(
   </div>
 ));
 
-storiesOf('Material/Inputs/Buttons', module)
+storiesOf('Buttons', module)
   .addDecorator(muiTheme())
   .add('Contained Buttons', () => <ContainedButtons />);
