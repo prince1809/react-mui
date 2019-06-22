@@ -44,7 +44,6 @@ class TouchRipple extends React.PureComponent {
 
   render() {
     const { center, classes, className, ...other } = this.props;
-    console.log(this.state.ripples);
 
     return (
       <span className={clsx(classes.root, className)} ref={this.container} {...other}>

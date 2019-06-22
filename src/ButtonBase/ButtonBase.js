@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import withStyles from '../styles/withStyles';
 import NoSsr from '../NoSsr/NoSsr';
 import TouchRipple from './TouchRipple';
+import { elementTypeAcceptingRef } from '@material-ui/utils';
 
 export const styles = {
   root: {
@@ -82,6 +83,32 @@ ButtonBase.propTypes = {
   action: PropTypes.func,
   buttonRef: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
   centerRipple: PropTypes.bool,
-}
+  children: PropTypes.bool,
+  classes: PropTypes.object.isRequired,
+  className: PropTypes.string,
+  component: elementTypeAcceptingRef,
+  disabled: PropTypes.bool,
+  disableRipple: PropTypes.bool,
+  disableTouchRipple: PropTypes.bool,
+  focusRipple: PropTypes.bool,
+  focusVisibleClassName: PropTypes.string,
+  onBlur: PropTypes.func,
+  onClick: PropTypes.func,
+  onDragLeave: PropTypes.func,
+  onFocus: PropTypes.func,
+  onFocusVisible: PropTypes.func,
+  onKeyDown: PropTypes.func,
+  onKeyUp: PropTypes.func,
+  onMouseDown: PropTypes.func,
+  onMouseLeave: PropTypes.func,
+  onMouseUp: PropTypes.func,
+  onTouchEnd: PropTypes.func,
+  onTouchMove: PropTypes.func,
+  onTouchStart: PropTypes.func,
+  role: PropTypes.string,
+  tabIndex: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  TouchRippleProps: PropTypes.object,
+  type: PropTypes.oneOf(['submit', 'reset', 'button']),
+};
 
 export default withStyles(styles, { name: 'MuiButtonBase' })(ButtonBase);

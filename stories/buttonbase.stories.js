@@ -5,23 +5,41 @@ import { muiTheme } from 'storybook-addon-material-ui';
 import withStyles from '../src/styles/withStyles';
 
 import { ButtonBase } from '../src';
+import clsx from 'clsx';
+
+export const {
+  children,
+  classes,
+
+  ref = ''
+} = {}
 
 const ContainedButtons = withStyles(
   theme => ({
-    button: {
+    root: {
       margin: theme.spacing(2),
     },
     input: {
       display: 'none',
     },
   }),
-)(({ classes }) => (
-  <div>
-    <ButtonBase variant="contained" className={classes.button}>
-      Default
+)(({ classes }) => {
+
+  const className = clsx(
+    classes.root,
+    // classNameProp,
+  )
+
+  return (
+    <div>
+      <ButtonBase
+      //className={className}
+      >
+        Default
     </ButtonBase>
-  </div>
-));
+    </div>
+  );
+});
 
 storiesOf('ButtonBase', module)
   .addDecorator(muiTheme())
