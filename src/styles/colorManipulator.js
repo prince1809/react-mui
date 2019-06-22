@@ -1,6 +1,21 @@
 import warming from 'warning';
 
 
+function clamp(value, min = 0, max = 1) {
+  warming(
+    value >= min && value <= max,
+    `Material-UI: the value provided ${value} is out of range [${min}, ${max}]`,
+  );
+
+  if (value < min) {
+    return min;
+  }
+  if (value > max) {
+    return max;
+  }
+  return value;
+}
+
 
 function hexToRgb(color) {
   color = color.substr(1);
@@ -16,14 +31,57 @@ function hexToRgb(color) {
 }
 
 export function decomposeColor(color) {
+  // Idempotent
   if (color.type) {
     return color;
   }
 
   if (color.charAt(0) === '#') {
-    return decomposeColor()
+    return decomposeColor(hexToRgb(color));
   }
+
+  const marker = color.indexOf('(');
+  const type = color.substring(0, marker);
+
+  if (['rgb', 'rgba', 'hsl', 'hsla'].indexOf(type) === -1) {
+    throw new Error(
+      [
+        `Material-UI: unsupported \`${color}\` color.`,
+        'We support the following formats: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla().',
+      ].join('\n'),
+    );
+  }
+
+  let values = color.substring(marker + 1, color.length - 1).split(',');
+  values = values.map(value => parseFloat(value));
+
+  return { type, values };
 }
+
+
+export function recomposeColor(color) {
+  const { type } = color;
+  let { values } = color;
+
+  if (type.indexOf('rgb') !== -1) {
+    // Only convert the first 3 values to int (i.e. not alpha)
+    values = values.map((n, i) => (i < 3 ? parseInt(n, 10) : n));
+  } else if (type.indexOf('hsl') !== -1) {
+    values[1] = `${values[1]}%`;
+    values[2] = `${values[2]}%`;
+  }
+
+  return `${type}(${values.join(', ')})`;
+}
+
 export function fade(color, value) {
-  //color = 
+  color = decomposeColor(color);
+  value = clamp(value);
+
+  if (color.type === 'rgb' || color.type === 'hsl') {
+    color.type += 'a';
+  }
+  color.values[3] = value;
+
+  return recomposeColor(color);
 }

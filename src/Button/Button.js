@@ -5,6 +5,7 @@ import withStyles from '../styles/withStyles';
 import ButtonBase from '../ButtonBase';
 import clsx from 'clsx';
 import { capitalize } from '../utils/helpers';
+import { fade } from '../styles/colorManipulator';
 
 export const styles = theme => ({
   root: {
@@ -13,28 +14,83 @@ export const styles = theme => ({
     boxSizing: 'border-box',
     minWidth: 64,
     padding: '6px 16px',
+    borderRadius: theme.shape.borderRadius,
+    color: theme.palette.text.primary,
+    transition: theme.transitions.create(['background-color', 'box-shadow', 'border'], {
+      duration: theme.transitions.duration.short,
+    }),
+    '&:hover': {
+      textDecoration: 'none',
+      backgroundColor: fade(theme.palette.text.primary, theme.palette.action.hoverOpacity),
+      '@media (hover: none)': {
+        backgroundColor: 'transparent',
+      },
+      '&$disabled': {
+        backgroundColor: 'transparent',
+      },
+    },
+    '&$disabled': {
+      color: theme.palette.action.disabled,
+    }
   },
   label: {
-
+    width: '100%',
+    display: 'inherit',
+    alignItems: 'inherit',
+    justifyContent: 'inherit',
   },
   text: {
-
+    padding: '6px 8px',
   },
   textPrimary: {
     color: theme.palette.primary.main,
+    '&:hover': {
+      backgroundColor: theme.palette.primary.main,
+      '@media (hover: none)': {
+        backgroundColor: 'transparent',
+      },
+    },
   },
   textSecondary: {
-
+    color: fade(theme.palette.secondary.main, theme.palette.action.hoverOpacity),
+    '&:hover': {
+      backgroundColor: fade(theme.palette.secondary.main, theme.palette.action.hoverOpacity),
+      // Reset on touch devices, it doesn't add specificity
+      '@media (hover: none)': {
+        backgroundColor: 'transparent',
+      },
+    },
   },
   outlined: {
-
+    padding: '5px 16px',
+    border: `1px solid ${
+      theme.palette.type === 'light' ? 'rgba(0, 0, 0, 0.23)' : 'rgba(255, 255, 255, 0.23)'
+      }`,
+    '&$disabled': {
+      border: `1px solid ${theme.palette.action.disabled}`,
+    },
   },
   outlinedPrimary: {
     color: theme.palette.primary.main,
-    border: `1px solid ${theme.palette.primary.main}`
+    border: `1px solid ${fade(theme.palette.primary.main, 0.5)}`,
+    '&:hover': {
+      border: `1px solid ${theme.palette.primary.main}`,
+      backgroundColor: fade(theme.palette.primary.main, theme.palette.action.hoverOpacity),
+      '@media (hover: none)': {
+        backgroundColor: 'transparent',
+      },
+    },
   },
   outlinedSecondary: {
-
+    color: theme.palette.secondary.main,
+    border: `1px solid ${theme.palette.secondary.main}`,
+    '&:hover': {
+      border: `1px solid ${theme.palette.secondary.main}`,
+      backgroundColor: fade(theme.palette.secondary.main, theme.palette.action.hoverOpacity),
+      '@media (hover: none)': {
+        backgroundColor: 'transparent',
+      },
+    },
   },
   contained: {
 
@@ -47,21 +103,25 @@ export const styles = theme => ({
     }
   },
   containedSecondary: {
-
+    color: theme.palette.secondary.contrastText,
+    backgroundColor: theme.palette.secondary.main,
   },
   focusVisible: {},
   disabled: {},
   colorInherit: {
-
+    color: 'inherit',
+    borderColor: 'currentColor',
   },
   sizeSmall: {
-
+    padding: '4px 8px',
+    fontSize: theme.typography.pxToRem(13),
   },
   sizeLarge: {
-
+    padding: '8px 24px',
+    fontSize: theme.typography.pxToRem(15),
   },
   fullWidth: {
-
+    width: '100%',
   },
 });
 
