@@ -37,6 +37,16 @@ export const styles = {
   disabled: {},
   focusVisible: {},
 };
+
+const useEnhancedEffect = typeof window !== 'undefined' ? React.useLayoutEffect : React.useEffect;
+
+function useEventCallback(fn) {
+  const ref = React.useRef(fn);
+  useEnhancedEffect(() => {
+    ref.current = fn;
+  });
+  return React.useCallback(event => (0, ref.current)(event), []);
+}
 const ButtonBase = React.forwardRef(function ButtonBase(props, ref) {
   const {
     action,
@@ -51,23 +61,107 @@ const ButtonBase = React.forwardRef(function ButtonBase(props, ref) {
     disableTouchRipple = false,
     focusRipple = false,
     focusVisibleClassName,
+    onBlur,
+    onClick,
+    onFocus,
+    onFocusVisible,
+    onKeyDown,
+    onKeyUp,
+    onMouseDown,
+    onMouseUp,
+    onTouchEnd,
+    onTouchMove,
+    onTouchStart,
+    onDragLeave,
+    tabIndex = 0,
     TouchRippleProps,
     type = 'button',
     ...other
   } = props;
 
   const buttonRef = React.useRef(null);
+  function getButtonNode() {
+    return ReactDOM.findDOMNode(buttonRef.current);
+  }
 
   const rippleRef = React.useRef(null);
 
+  const [focusVisible, setFocusVisible] = React.useState(false);
+  if (disabled && focusVisible) {
+    setFocusVisible(false);
+  }
+
+  function useRippleHandler(rippleAction, eventCallback, skipRippleAction = disableTouchRipple) {
+    return useEventCallback(event => {
+      if (eventCallback) {
+        eventCallback(event);
+      }
+
+      const ignore = event.defaultPrevented || skipRippleAction;;
+      if (!ignore && rippleRef.current) {
+        rippleRef.current[rippleAction](event);
+      }
+
+      return true;
+    });
+  }
+
+  const handleMouseDown = useRippleHandler('start', onMouseDown);
+  const handleDragLeave = useRippleHandler('stop', onDragLeave);
+  const handleMouseUp = useRippleHandler('stop', onMouseUp);
+  const handleMouseLeave = useRippleHandler('stop', event => {
+    if (focusVisible) {
+      event.preventDefault();
+    }
+    if (onMouseLeave) {
+      onMouseLeave(event);
+    }
+  });
+  const handleTouchStart = useRippleHandler('start', onTouchStart);
+  const handleTouchEnd = useRippleHandler('stop', onTouchEnd);
+  const handleTouchMove = useRippleHandler('stop', onTouchMove);
+  const handleBlur = useRippleHandler('stop', event => {
+    if (focusVisible) {
+      onBlurVisible(event);
+      setFocusVisible(false);
+    }
+    if (onBlur) {
+      onBlur(event);
+    }
+  }, false);
+
   const className = clsx(
     classes.root,
+    {
+      [classes.disabled]: disabled,
+      [classes.focusVisible]: focusVisible,
+      [focusVisibleClassName]: focusVisible,
+    },
     classNameProp,
   );
   let ComponentProp = component;
+
+  let buttonProps = {};
+  if (ComponentProp === 'button') {
+    buttonProps.type = type;
+    buttonProps.disabled = disabled;
+  } else {
+    buttonProps.role = 'button';
+    buttonProps['aria-disabled'] = disabled;
+  }
   return (
     <ComponentProp
       className={className}
+      onBlur={handleBlur}
+      onMouseDown={handleMouseDown}
+      onMouseLeave={handleMouseLeave}
+      onMouseUp={handleMouseUp}
+      onDragLeave={handleDragLeave}
+      onTouchEnd={handleTouchEnd}
+      onTouchMove={handleTouchMove}
+      onTouchStart={handleTouchStart}
+      {...buttonProps}
+      {...other}
     >
       {children}
       {!disableRipple && !disabled ? (

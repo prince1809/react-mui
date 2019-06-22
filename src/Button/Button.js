@@ -201,8 +201,6 @@ const Button = React.forwardRef(function Button(props, ref) {
     classNameProp,
   );
 
-  console.log(className)
-
   return (
     <ButtonBase
       className={className}
