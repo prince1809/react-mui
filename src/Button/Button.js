@@ -45,14 +45,14 @@ export const styles = theme => ({
   textPrimary: {
     color: theme.palette.primary.main,
     '&:hover': {
-      backgroundColor: theme.palette.primary.main,
+      backgroundColor: fade(theme.palette.primary.main, theme.palette.action.hoverOpacity),
       '@media (hover: none)': {
         backgroundColor: 'transparent',
       },
     },
   },
   textSecondary: {
-    color: fade(theme.palette.secondary.main, theme.palette.action.hoverOpacity),
+    color: theme.palette.secondary.main,
     '&:hover': {
       backgroundColor: fade(theme.palette.secondary.main, theme.palette.action.hoverOpacity),
       // Reset on touch devices, it doesn't add specificity
@@ -83,7 +83,7 @@ export const styles = theme => ({
   },
   outlinedSecondary: {
     color: theme.palette.secondary.main,
-    border: `1px solid ${theme.palette.secondary.main}`,
+    border: `1px solid ${fade(theme.palette.secondary.main, 0.5)}`,
     '&:hover': {
       border: `1px solid ${theme.palette.secondary.main}`,
       backgroundColor: fade(theme.palette.secondary.main, theme.palette.action.hoverOpacity),
@@ -91,20 +91,54 @@ export const styles = theme => ({
         backgroundColor: 'transparent',
       },
     },
+    '&$disabled': {
+      border: `1px solid ${theme.palette.action.disabled}`,
+    },
   },
   contained: {
-
+    color: theme.palette.getContrastText(theme.palette.grey[300]),
+    backgroundColor: theme.palette.grey[300],
+    boxShadow: theme.shadows[2],
+    '&$focusVisible': {
+      boxShadow: theme.shadows[6],
+    },
+    '&:active': {
+      boxShadow: theme.shadows[8],
+    },
+    '&$disabled': {
+      color: theme.palette.action.disabled,
+      boxShadow: theme.shadows[0],
+      backgroundColor: theme.palette.action.disabledBackground,
+    },
+    '&:hover': {
+      backgroundColor: theme.palette.grey.A100,
+      '@media (hover: none)': {
+        backgroundColor: theme.palette.grey[300],
+      },
+      '&$disabled': {
+        backgroundColor: theme.palette.action.disableBackground,
+      },
+    },
   },
   containedPrimary: {
     color: theme.palette.primary.contrastText,
     backgroundColor: theme.palette.primary.main,
     '&:hover': {
-      backgroundColor: theme.palette.secondary.dark,
-    }
+      backgroundColor: theme.palette.primary.dark,
+    },
+    '@media (hover: none)': {
+      backgroundColor: theme.palette.primary.main,
+    },
   },
   containedSecondary: {
     color: theme.palette.secondary.contrastText,
     backgroundColor: theme.palette.secondary.main,
+    '&:hover': {
+      backgroundColor: theme.palette.secondary.dark,
+      '@media (hover: none)': {
+        backgroundColor: theme.palette.secondary.main,
+      }
+    }
   },
   focusVisible: {},
   disabled: {},
