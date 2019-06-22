@@ -10,6 +10,9 @@ export const styles = theme => ({
   root: {
     lineHeight: 1.75,
     ...theme.typography.button,
+    boxSizing: 'border-box',
+    minWidth: 64,
+    padding: '6px 16px',
   },
   label: {
 
@@ -27,7 +30,8 @@ export const styles = theme => ({
 
   },
   outlinedPrimary: {
-
+    color: theme.palette.primary.main,
+    border: `1px solid ${theme.palette.primary.main}`
   },
   outlinedSecondary: {
 
@@ -38,6 +42,9 @@ export const styles = theme => ({
   containedPrimary: {
     color: theme.palette.primary.contrastText,
     backgroundColor: theme.palette.primary.main,
+    '&:hover': {
+      backgroundColor: theme.palette.secondary.dark,
+    }
   },
   containedSecondary: {
 
