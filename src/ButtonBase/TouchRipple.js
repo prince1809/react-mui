@@ -7,6 +7,8 @@ import clsx from 'clsx';
 export const styles = theme => ({
   root: {
     display: 'block',
+    position: 'absolute',
+    overflow: 'hidden',
   }
 });
 
