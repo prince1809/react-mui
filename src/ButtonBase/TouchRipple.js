@@ -1,5 +1,5 @@
 import React from 'react';
-import propTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { TransitionGroup } from 'react-transition-group';
 import withStyles from '../styles/withStyles';
 import clsx from 'clsx';
@@ -20,8 +20,31 @@ class TouchRipple extends React.PureComponent {
     ripples: []
   };
 
+  container = React.createRef();
+
+  componentWillUnmount() {
+    clearTimeout(this.startTimer);
+  }
+
+  pulsate = () => {
+    this.start({}, { pulsate: true });
+  };
+
+  start = (event = {}, options = {}, cb) => {
+
+  };
+
+  startCommit = params => {
+
+  };
+
+  stop = (event, ch) => {
+
+  };
+
   render() {
     const { center, classes, className, ...other } = this.props;
+    console.log(this.state.ripples);
 
     return (
       <span className={clsx(classes.root, className)} ref={this.container} {...other}>
@@ -31,6 +54,16 @@ class TouchRipple extends React.PureComponent {
       </span>
     );
   }
+}
+
+TouchRipple.propTypes = {
+  center: PropTypes.bool,
+  classes: PropTypes.object.isRequired,
+  className: PropTypes.string,
+};
+
+TouchRipple.defaultProps = {
+  center: false,
 }
 
 export default withStyles(styles, { flip: false, name: 'MuiTouchRipple' })(TouchRipple);

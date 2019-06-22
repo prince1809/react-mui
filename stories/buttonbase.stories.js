@@ -4,7 +4,7 @@ import { storiesOf } from '@storybook/react';
 import { muiTheme } from 'storybook-addon-material-ui';
 import withStyles from '../src/styles/withStyles';
 
-import ButtonBase from '../src/ButtonBase';
+import { ButtonBase } from '../src';
 
 const ContainedButtons = withStyles(
   theme => ({
