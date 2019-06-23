@@ -5,6 +5,8 @@ import withStyles from '../styles/withStyles';
 import NoSsr from '../NoSsr/NoSsr';
 import TouchRipple from './TouchRipple';
 import { elementTypeAcceptingRef } from '@material-ui/utils';
+import { useForkRef } from '../utils/reactHelpers';
+import { useIsFocusVisible } from '../utils/focusVisible';
 
 export const styles = {
   root: {
@@ -68,6 +70,7 @@ const ButtonBase = React.forwardRef(function ButtonBase(props, ref) {
     onKeyDown,
     onKeyUp,
     onMouseDown,
+    onMouseLeave,
     onMouseUp,
     onTouchEnd,
     onTouchMove,
@@ -91,6 +94,8 @@ const ButtonBase = React.forwardRef(function ButtonBase(props, ref) {
     setFocusVisible(false);
   }
 
+  const { isFocusVisible, onBlurVisible, ref: focusVisibleRef } = useIsFocusVisible();
+
   function useRippleHandler(rippleAction, eventCallback, skipRippleAction = disableTouchRipple) {
     return useEventCallback(event => {
       if (eventCallback) {
@@ -101,7 +106,6 @@ const ButtonBase = React.forwardRef(function ButtonBase(props, ref) {
       if (!ignore && rippleRef.current) {
         rippleRef.current[rippleAction](event);
       }
-
       return true;
     });
   }
@@ -129,6 +133,22 @@ const ButtonBase = React.forwardRef(function ButtonBase(props, ref) {
       onBlur(event);
     }
   }, false);
+  const handleFocus = useEventCallback(event => {
+    if (disabled) {
+      return;
+    }
+
+    if (!buttonRef.current) {
+      buttonRef.current = event.currentTarget;
+    }
+  });
+  const keyDownRef = React.useRef(false);
+  const handleKeyDown = useEventCallback(event => {
+
+  });
+  const handleKeyUp = useEventCallback(event => {
+
+  });
 
   const className = clsx(
     classes.root,
@@ -149,10 +169,18 @@ const ButtonBase = React.forwardRef(function ButtonBase(props, ref) {
     buttonProps.role = 'button';
     buttonProps['aria-disabled'] = disabled;
   }
+
+  const handleUserRef = useForkRef(buttonRefProp, ref);
+  const handleOwnRef = useForkRef(focusVisibleRef, buttonRef);
+  const handleRef = useForkRef(handleUserRef, handleOwnRef);
   return (
     <ComponentProp
       className={className}
       onBlur={handleBlur}
+      onClick={onClick}
+      onFocus={handleFocus}
+      onKeyDown={handleKeyDown}
+      onKeyUp={handleKeyUp}
       onMouseDown={handleMouseDown}
       onMouseLeave={handleMouseLeave}
       onMouseUp={handleMouseUp}
@@ -160,6 +188,8 @@ const ButtonBase = React.forwardRef(function ButtonBase(props, ref) {
       onTouchEnd={handleTouchEnd}
       onTouchMove={handleTouchMove}
       onTouchStart={handleTouchStart}
+      ref={handleRef}
+      tabIndex={disabled ? -1 : tabIndex}
       {...buttonProps}
       {...other}
     >
@@ -177,7 +207,7 @@ ButtonBase.propTypes = {
   action: PropTypes.func,
   buttonRef: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
   centerRipple: PropTypes.bool,
-  children: PropTypes.bool,
+  children: PropTypes.node,
   classes: PropTypes.object.isRequired,
   className: PropTypes.string,
   component: elementTypeAcceptingRef,
