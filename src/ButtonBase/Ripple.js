@@ -29,7 +29,7 @@ function Ripple(props) {
     width: rippleSize,
     height: rippleSize,
     top: -(rippleSize / 2) + rippleY,
-    bottom: -(rippleSize / 2) + rippleX,
+    left: -(rippleSize / 2) + rippleX,
   };
 
   const childClassName = clsx(classes.child, {
