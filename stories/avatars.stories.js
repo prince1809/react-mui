@@ -8,6 +8,7 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 
 import withStyles from '../src/styles/withStyles'
 import Avatar from '../src/Avatar';
+import { deepOrange, deepPurple, green, pink } from '../src/colors';
 
 
 import imageFile from '../static/images/avatar/1.png';
@@ -42,12 +43,12 @@ const LetterAvatars = withStyles({
   orangeAvatar: {
     margin: 10,
     color: '#fff',
-    //backgroundColor: deepOrange[500],
+    backgroundColor: deepOrange[500],
   },
   purpleAvatar: {
     margin: 10,
     color: '#fff',
-    //backgroundColor: deepPurple[500],
+    backgroundColor: deepPurple[500],
   }
 })(({ classes }) => (
   <div>
@@ -65,12 +66,12 @@ const IconAvatars = withStyles({
   pinkAvatar: {
     margin: 10,
     color: '#fff',
-    //backgroundColor: pink[500],
+    backgroundColor: pink[500],
   },
   greenAvatar: {
     margin: 10,
     color: '#fff',
-    //backgroundColor: green[500],
+    backgroundColor: green[500],
   }
 })(({ classes }) => (
   <div>
