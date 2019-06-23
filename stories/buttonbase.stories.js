@@ -1,11 +1,11 @@
 import React from 'react';
 
 import { storiesOf } from '@storybook/react';
+import clsx from 'clsx';
 import { muiTheme } from 'storybook-addon-material-ui';
 import withStyles from '../src/styles/withStyles';
-
 import ButtonBase from '../src/ButtonBase';
-import clsx from 'clsx';
+
 
 export const {
   children,
