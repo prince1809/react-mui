@@ -96,6 +96,23 @@ const ButtonBase = React.forwardRef(function ButtonBase(props, ref) {
 
   const { isFocusVisible, onBlurVisible, ref: focusVisibleRef } = useIsFocusVisible();
 
+  React.useImperativeHandle(
+    action,
+    () => ({
+      focusVisible: () => {
+        setFocusVisible(true);
+        buttonRef.current.focus();
+      },
+    }),
+    [],
+  );
+
+  React.useEffect(() => {
+    if (focusVisible && focusRipple && !disableRipple) {
+      rippleRef.current.pulsate();
+    }
+  }, [disableRipple, focusRipple, focusVisible]);
+
   function useRippleHandler(rippleAction, eventCallback, skipRippleAction = disableTouchRipple) {
     return useEventCallback(event => {
       if (eventCallback) {
@@ -141,13 +158,64 @@ const ButtonBase = React.forwardRef(function ButtonBase(props, ref) {
     if (!buttonRef.current) {
       buttonRef.current = event.currentTarget;
     }
+
+    if (isFocusVisible(event)) {
+      setFocusVisible(true);
+
+      if (onFocusVisible) {
+        onFocusVisible(event);
+      }
+    }
+
+    if (onFocus) {
+      onFocus(event);
+    }
   });
   const keyDownRef = React.useRef(false);
   const handleKeyDown = useEventCallback(event => {
+    if (
+      focusRipple &&
+      !keyDownRef.current &&
+      focusVisible &&
+      rippleRef.current &&
+      event.key === ' '
+    ) {
+      keyDownRef.current = true;
+      event.persist();
+      rippleRef.current.stop(event, () => {
+        rippleRef.current.start(event);
+      });
+    }
 
+    if (onKeyDown) {
+      onKeyDown(event);
+    }
+
+    const button = getButtonNode();
+    if (
+      event.target === event.currentTarget &&
+      component &&
+      component !== 'button' &&
+      (event.key === ' ' || event.key === 'Enter') &&
+      !(button.tagName === 'A' && button.href)
+    ) {
+      event.preventDefault();
+      if (onClick) {
+        onClick(event);
+      }
+    }
   });
   const handleKeyUp = useEventCallback(event => {
-
+    if (focusRipple && event.key === ' ' && rippleRef.current && focusVisible) {
+      keyDownRef.current = false;
+      event.persist();
+      rippleRef.current.stop(event, () => {
+        rippleRef.current.pulsate(event);
+      });
+    }
+    if (onKeyUp) {
+      onKeyUp(event);
+    }
   });
 
   const className = clsx(
@@ -160,6 +228,10 @@ const ButtonBase = React.forwardRef(function ButtonBase(props, ref) {
     classNameProp,
   );
   let ComponentProp = component;
+
+  if (ComponentProp === 'button' && other.href) {
+    ComponentProp = 'a';
+  }
 
   let buttonProps = {};
   if (ComponentProp === 'button') {

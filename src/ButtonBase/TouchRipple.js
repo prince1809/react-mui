@@ -64,7 +64,7 @@ export const styles = theme => ({
       opacity: 0.3,
     },
   },
-  '@keyrfames mui-ripple-exit': {
+  '@keyframes mui-ripple-exit': {
     '0%': {
       opacity: 1,
     },
@@ -211,6 +211,28 @@ class TouchRipple extends React.PureComponent {
     console.log("Ripple effect stopped");
     console.log('event:', event)
     console.log('ch:', ch)
+    clearTimeout(this.startTimer);
+    const { ripples } = this.state;
+    if (event.type === 'touched' && this.startTimerCommit) {
+      event.persist();
+      this.startTimerCommit();
+      this.startTimerCommit = null;
+      this.startTimer = setTimeout(() => {
+        this.stop(event, cb);
+      });
+      return;
+    }
+
+    this.startTimerCommit = null;
+
+    if (ripples && ripples.length) {
+      this.setState(
+        {
+          ripples: ripples.slice(1),
+        },
+        cb,
+      );
+    }
   };
 
   render() {
