@@ -31,6 +31,33 @@ class TouchRipple extends React.PureComponent {
   };
 
   start = (event = {}, options = {}, cb) => {
+    console.log("Ripple effect started");
+    console.log('event:', event)
+    console.log('options:', options)
+    console.log('cb:', cb)
+
+    const {
+      pulsate = false,
+      center = this.props.center || options.center,
+      fakeElement = false,
+    } = options;
+
+    if (event.type === 'mousedown' && this.ignoringMouseDown) {
+      this.ignoringMouseDown = false;
+      return;
+    }
+
+    if (event.type === 'touchstart') {
+      this.ignoringMouseDown = true;
+    }
+
+    const element = fakeElement ? null : this.container.current;
+    const rect = element ? element.getBoundingClientRect() : {};
+
+    let rippleX;
+    let rippleY;
+    let rippleSize;
+
 
   };
 
@@ -39,7 +66,9 @@ class TouchRipple extends React.PureComponent {
   };
 
   stop = (event, ch) => {
-
+    console.log("Ripple effect stopped");
+    console.log('event:', event)
+    console.log('ch:', ch)
   };
 
   render() {
