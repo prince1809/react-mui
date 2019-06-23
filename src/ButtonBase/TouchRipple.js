@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { TransitionGroup } from 'react-transition-group';
-import withStyles from '../styles/withStyles';
 import clsx from 'clsx';
+import withStyles from '../styles/withStyles';
 import Ripple from './Ripple';
 
 const DURATION = 550;
@@ -85,12 +85,11 @@ export const styles = theme => ({
   },
 });
 
-
 class TouchRipple extends React.PureComponent {
 
   state = {
-    nextkey: 0,
-    ripples: []
+    nextKey: 0,
+    ripples: [],
   };
 
   container = React.createRef();
@@ -104,15 +103,10 @@ class TouchRipple extends React.PureComponent {
   };
 
   start = (event = {}, options = {}, cb) => {
-    console.log("Ripple effect started");
-    console.log('event:', event)
-    console.log('options:', options)
-    console.log('cb:', cb)
-
     const {
       pulsate = false,
-      center = this.props.center || options.center,
-      fakeElement = false,
+      center = this.props.center || options.pulsate,
+      fakeElement = false, // For test purposes
     } = options;
 
     if (event.type === 'mousedown' && this.ignoringMouseDown) {
@@ -125,13 +119,16 @@ class TouchRipple extends React.PureComponent {
     }
 
     const element = fakeElement ? null : this.container.current;
-    const rect = element ? element.getBoundingClientRect() : {
-      width: 0,
-      height: 0,
-      left: 0,
-      top: 0,
-    };
+    const rect = element
+      ? element.getBoundingClientRect()
+      : {
+        width: 0,
+        height: 0,
+        left: 0,
+        top: 0,
+      };
 
+    // Get the size of the ripple
     let rippleX;
     let rippleY;
     let rippleSize;
@@ -150,39 +147,38 @@ class TouchRipple extends React.PureComponent {
       rippleY = Math.round(clientY - rect.top);
     }
 
-
     if (center) {
       rippleSize = Math.sqrt((2 * rect.width ** 2 + rect.height ** 2) / 3);
       if (rippleSize % 2 === 0) {
         rippleSize += 1;
       }
     } else {
-      const sizeX = Math.max(Math.abs((element ? element.clientWidth : 0) - rippleX), rippleX) * 2 + 2;
-      const sizeY = Math.max(Math.abs((element ? element.clientWidth : 0) - rippleY), rippleY) * 2 + 2;
+      const sizeX =
+        Math.max(Math.abs((element ? element.clientWidth : 0) - rippleX), rippleX) * 2 + 2;
+      const sizeY =
+        Math.max(Math.abs((element ? element.clientHeight : 0) - rippleY), rippleY) * 2 + 2;
       rippleSize = Math.sqrt(sizeX ** 2 + sizeY ** 2);
     }
 
     if (event.touches) {
-      // Prepare the ripple effect
+      // Prepare the ripple effect.
       this.startTimerCommit = () => {
         this.startCommit({ pulsate, rippleX, rippleY, rippleSize, cb });
       };
-
-      // Delay the execution of the ripple effect.
       this.startTimer = setTimeout(() => {
         if (this.startTimerCommit) {
           this.startTimerCommit();
           this.startTimerCommit = null;
         }
-      }, DELAY_RIPPLE); // we have to make a tradeoff with this value.
+      }, DELAY_RIPPLE);
     } else {
       this.startCommit({ pulsate, rippleX, rippleY, rippleSize, cb });
     }
   };
 
   startCommit = params => {
-    console.log('startCommit');
     const { pulsate, rippleX, rippleY, rippleSize, cb } = params;
+
     this.setState(
       state => ({
         nextKey: state.nextKey + 1,
@@ -199,21 +195,17 @@ class TouchRipple extends React.PureComponent {
             rippleX={rippleX}
             rippleY={rippleY}
             rippleSize={rippleSize}
-          />
-        ]
+          />,
+        ],
       }),
       cb,
     );
-    console.log(this.state.ripples);
   };
 
-  stop = (event, ch) => {
-    console.log("Ripple effect stopped");
-    console.log('event:', event)
-    console.log('ch:', ch)
+  stop = (event, cb) => {
     clearTimeout(this.startTimer);
     const { ripples } = this.state;
-    if (event.type === 'touched' && this.startTimerCommit) {
+    if (event.type === 'touchend' && this.startTimerCommit) {
       event.persist();
       this.startTimerCommit();
       this.startTimerCommit = null;
@@ -256,6 +248,6 @@ TouchRipple.propTypes = {
 
 TouchRipple.defaultProps = {
   center: false,
-}
+};
 
 export default withStyles(styles, { flip: false, name: 'MuiTouchRipple' })(TouchRipple);
