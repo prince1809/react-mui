@@ -25,9 +25,9 @@ export const styles = theme => {
       height,
       color: theme.palette.getContrastText(backgroundColor),
       backgroundColor,
-      borerRadius: height / 2,
-      whiteSpace: 'noWrap',
-      transitions: theme.transitions.create(['background-color', 'box-shadow']),
+      borderRadius: height / 2,
+      whiteSpace: 'nowrap',
+      transition: theme.transitions.create(['background-color', 'box-shadow']),
       cursor: 'default',
       outline: 'none',
       textDecoration: 'none',
@@ -52,10 +52,142 @@ export const styles = theme => {
       cursor: 'pointer',
       '&:hover, &:focus': {
         backgroundColor: emphasize(backgroundColor, 0.08),
-      }
-    }
-
-  }
+      },
+      '&:active': {
+        boxShadow: theme.shadows[1],
+        backgroundColor: emphasize(backgroundColor, 0.12),
+      },
+    },
+    clickableColorPrimary: {
+      '&:hover, &:focus': {
+        backgroundColor: emphasize(theme.palette.primary.main, 0.08),
+      },
+      '&:active': {
+        backgroundColor: emphasize(theme.palette.primary.main, 0.12),
+      },
+    },
+    clickableColorSecondary: {
+      '&:hover, &:focus': {
+        backgroundColor: emphasize(theme.palette.secondary.main, 0.08),
+      },
+      '&:active': {
+        backgroundColor: emphasize(theme.palette.secondary.main, 0.12),
+      },
+    },
+    deletable: {
+      '&:focus': {
+        backgroundColor: emphasize(backgroundColor, 0.08),
+      },
+    },
+    deletableColorPrimary: {
+      '&:focus': {
+        backgroundColor: emphasize(theme.palette.primary.main, 0.2),
+      },
+    },
+    deletableColorSecondary: {
+      '&:focus': {
+        backgroundColor: emphasize(theme.palette.secondary.main, 0.2),
+      },
+    },
+    outlined: {
+      backgroundColor: 'transparent',
+    },
+    outlinedPrimary: {
+      color: theme.palette.primary.main,
+    },
+    outlinedSecondary: {
+      color: theme.palette.secondary.main,
+    },
+    avatar: {
+      marginRight: -4,
+      width: height,
+      height,
+      color: theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[300],
+      fontSize: theme.typography.pxToRem(16),
+    },
+    avatarSmall: {
+      width: smallHeight,
+      height: smallHeight,
+      fontSize: theme.typography.pxToRem(12),
+    },
+    avatarPrimary: {
+      color: theme.palette.primary.contrastText,
+      backgroundColor: theme.palette.primary.dark,
+    },
+    avatarColorSecondary: {
+      color: theme.palette.secondary.contrastText,
+      backgroundColor: theme.palette.secondary.dark,
+    },
+    avatarChildren: {
+      height: 18,
+    },
+    icon: {
+      color: theme.palette.type === 'light' ? theme.palette.grey[700] : theme.palette.grey[300],
+      marginLeft: 5,
+      marginRight: -8,
+    },
+    iconSmall: {
+      width: 16,
+      marginRight: -5,
+    },
+    iconColorPrimary: {
+      color: 'inherit',
+    },
+    iconColorSecondary: {
+      color: 'inherit',
+    },
+    label: {
+      display: 'flex',
+      alignItems: 'center',
+      paddingLeft: 12,
+      paddingRight: 12,
+      useSelect: 'none',
+      whiteSpace: 'nowrap',
+      cursor: 'inherit',
+    },
+    labelSmall: {
+      paddingLeft: 8,
+      paddingRight: 8,
+    },
+    deleteIcon: {
+      WebkitTapHighlightColor: 'transparent',
+      color: deleteIconColor,
+      cursor: 'pointer',
+      height: 'auto',
+      margin: '0 5px 0 -8px',
+      '&:hover': {
+        color: fade(deleteIconColor, 0.4),
+      },
+    },
+    deleteIconSmall: {
+      height: 16,
+      margin: '0 1px 0 -9px',
+    },
+    deleteIconColorPrimary: {
+      color: fade(theme.palette.primary.contrastText, 0.7),
+      '&:hover, &:active': {
+        color: theme.palette.primary.contrastText,
+      },
+    },
+    deleteIconColorSecondary: {
+      color: fade(theme.palette.secondary.contrastText, 0.7),
+      '&:hover, &:active': {
+        color: theme.palette.secondary.contrastText,
+      },
+    },
+    deleteIconOutlinedColorPrimary: {
+      color: fade(theme.palette.primary.main, 0.7),
+      '&:hover, &:active': {
+        color: theme.palette.primary.main,
+      },
+    },
+    deleteIconOutlinedColorSecondary: {
+      color: fade(theme.palette.secondary.main, 0.7),
+      '&:hover, &:active': {
+        color: theme.palette.secondary.main,
+      },
+    },
+  };
 };
 
 const Chip = React.forwardRef(function Chip(props, ref) {
@@ -124,7 +256,20 @@ const Chip = React.forwardRef(function Chip(props, ref) {
 
   let deleteIcon = null;
   if (onDelete) {
+    const customClasses = clsx({
+      [classes.deleteIconSmall]: small,
+      [classes[`deleteIconColor${capitalize(color)}`]]: color !== 'default' && variant !== 'outlined',
+      [classes[`defaultIconOutlinedColor${capitalize(color)}`]]: color !== 'default' && variant === 'outlined',
+    });
 
+    deleteIcon = deleteIconProp && React.isValidElement(deleteIconProp) ? (
+      React.cloneElement(deleteIconProp, {
+        className: clsx(deleteIconProp.props.className, classes.deleteIcon, customClasses),
+        onClick: handleDeleteIconClick,
+      })
+    ) : (
+        <span>cancel</span>
+      );
   }
 
   let avatar = null;
@@ -172,6 +317,7 @@ const Chip = React.forwardRef(function Chip(props, ref) {
       >
         {label}
       </span>
+      {deleteIcon}
     </Component>
   );
 });
