@@ -5,6 +5,7 @@ import { action } from '@storybook/addon-actions';
 
 import withStyles from '../src/styles/withStyles';
 import Container from '../src/Container';
+import CssBaseline from '../src/CssBaseline';
 import Typography from '../src/Typography';
 
 
@@ -21,7 +22,7 @@ const DefaultContainer = withStyles(
   }),
 )(({ classes }) => (
   <React.Fragment>
-    {/* <CssBaseline /> */}
+    <CssBaseline />
     <Container maxWidth="sm">
       <Typography component="div" style={{ backgroundColor: '#cfe8fc', height: '100vh' }} />
     </Container>
@@ -41,7 +42,7 @@ const FixedContainer = withStyles(
   }),
 )(({ classes }) => (
   <React.Fragment>
-    {/* <CssBaseline /> */}
+    <CssBaseline />
     <Container fixed>
       <Typography component="div" style={{ backgroundColor: '#cfe8fc', height: '100vh' }} />
     </Container>
