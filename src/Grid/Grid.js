@@ -63,17 +63,21 @@ function generateGutter(theme, breakpoint) {
 export const styles = theme => ({
   root: {},
   container: {
-
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexWrap: 'wrap',
+    width: '100%'
   },
   item: {
-
+    boxSizing: 'border-box',
+    margin: '0',
   },
 
   zeroMinWidth: {
-
+    minWidth: 0,
   },
   'direction-xs-column': {
-
+    flexDirection: 'column',
   },
   'direction-xs-column-reverse': {
 
