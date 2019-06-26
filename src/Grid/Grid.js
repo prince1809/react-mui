@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import withStyles from '../styles/withStyles';
+import { keys as breakpointKeys } from '../styles/createBreakpoints';
 import { breakpoints } from '@material-ui/system';
 
 const SPACINGS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -12,8 +13,50 @@ function generateGrid(globalStyles, theme, breakpoint) {
 
 
   GRID_SIZES.forEach(size => {
-    const key = `grid-${breakpoint}-${size}`
+    const key = `grid-${breakpoint}-${size}`;
+
+    if (size === true) {
+      styles[key] == {
+      };
+      return;
+    }
+
+    if (size === 'auto') {
+      styles[key] = {
+
+      }
+      return;
+    }
+
+    const width = `${Math.round((size / 12) * 10e7) / 10e5}%`;
+
+    styles[key] = {
+
+    };
   });
+
+  if (breakpoint === 'xs') {
+    Object.assign(globalStyles, styles);
+  } else {
+    globalStyles[theme.breakpoints.up(breakpoint)] = styles;
+  }
+}
+
+function generateGutter(theme, breakpoint) {
+  const styles = {};
+
+  SPACINGS.forEach(spacing => {
+    const themeSpacing = theme.spacing(spacing);
+
+    if (themeSpacing === 0) {
+      return;
+    }
+
+    styles[`spacing-${breakpoint}-${spacing}`] = {
+    };
+
+  });
+  return styles;
 }
 
 
@@ -85,8 +128,12 @@ export const styles = theme => ({
   },
   'justify-xs-space-evenly': {
 
-  }
-
+  },
+  ...generateGutter(theme, 'xs'),
+  ...breakpointKeys.reduce((accumulator, key) => {
+    generateGrid(accumulator, theme, key);
+    return accumulator;
+  }, {}),
 });
 
 const Grid = React.forwardRef((props, ref) => {
@@ -131,8 +178,6 @@ const Grid = React.forwardRef((props, ref) => {
     },
     classNameProp,
   );
-
-  console.log(clasName);
 
   return <Component className={clasName} ref={ref} {...other} />;
 })
