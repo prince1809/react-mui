@@ -12,7 +12,7 @@ import Button from '../src/Button';
 
 
 
-const DefaultChips = withStyles(
+const DefaultAppbar = withStyles(
   theme => ({
     root: {
       flexGrow: 1,
@@ -38,8 +38,27 @@ const DefaultChips = withStyles(
       </Toolbar>
     </AppBar>
   </div>
-))
+));
+
+const SimpleAppbar = withStyles(
+  theme => ({
+    root: {
+      flexGrow: 1,
+    },
+  })
+)(({ classes }) => (
+  <div className={classes.root}>
+    <AppBar position="static" color="default">
+      <Toolbar>
+        <Typography variant="h6" color="inherit">
+          Photos
+        </Typography>
+      </Toolbar>
+    </AppBar>
+  </div>
+));
 
 storiesOf('AppBar', module)
   .addDecorator(muiTheme())
-  .add('default', () => <DefaultChips />);
+  .add('default', () => <DefaultAppbar />)
+  .add('simple', () => <SimpleAppbar />);
