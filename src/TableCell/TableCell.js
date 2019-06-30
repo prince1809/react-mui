@@ -24,6 +24,52 @@ export const styles = theme => ({
     '&:last-child': {
       paddingRight: 16,
     },
+  },
+  head: {
+    color: theme.palette.text.secondary,
+    fontSize: theme.typography.pxToRem(12),
+    lineHeight: theme.typography.pxToRem(12),
+    fontWeight: theme.typography.fontWeightMedium,
+  },
+  body: {
+    color: theme.palette.text.primary,
+    fontWeight: theme.typography.fontWeightRegular,
+  },
+  footer: {
+    color: theme.palette.text.secondary,
+    lineHeight: theme.typography.pxToRem(21),
+    fontSize: theme.typography.pxToRem(12),
+  },
+  sizeSmall: {
+    padding: '6px 24px 6px 16px',
+    '&:last-child': {
+      paddingRight: 16,
+    },
+    '&$paddingCheckbox': {
+      width: 24,
+    }
+  },
+  paddingCheckbox: {
+
+  },
+  paddingNone: {
+    padding: 0,
+    '&:last-child': {
+      padding: 0,
+    }
+  },
+  alignLeft: {
+    textAlign: 'left',
+  },
+  alignCenter: {
+    textAlign: 'center',
+  },
+  alignRight: {
+    textAlign: 'right',
+    flexDirection: 'row-reverse',
+  },
+  alignJustify: {
+    textAlign: 'justify',
   }
 });
 
@@ -83,7 +129,15 @@ const TableCell = React.forwardRef(function TableCell(props, ref) {
 });
 
 TableCell.propTypes = {
-
+  align: PropTypes.oneOf(['inherit', 'left', 'center', 'right', 'justify']),
+  children: PropTypes.node,
+  classes: PropTypes.object.isRequired,
+  className: PropTypes.string,
+  component: PropTypes.elementType,
+  padding: PropTypes.oneOf(['default', 'checkbox', 'none']),
+  scope: PropTypes.string,
+  sortDirection: PropTypes.oneOf(['asc', 'desc', false]),
+  variant: PropTypes.oneOf(['head', 'body', 'footer']),
 };
 
 export default withStyles(styles, { name: 'MuiTableCell' })(TableCell);
