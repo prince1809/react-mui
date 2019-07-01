@@ -5,6 +5,7 @@ import { muiTheme } from 'storybook-addon-material-ui';
 import withStyles from '../src/styles/withStyles';
 import List from '../src/List';
 import ListItem from '../src/ListItem';
+import ListItemIcon from '../src/ListItemIcon';
 
 
 const SimpleList = withStyles(
@@ -17,7 +18,9 @@ const SimpleList = withStyles(
   <div className={classes.root}>
     <List>
       <ListItem>
-        item
+        <ListItemIcon>
+          Item
+        </ListItemIcon>
       </ListItem>
     </List>
   </div>
