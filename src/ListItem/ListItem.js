@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import withStyles from '../styles/withStyles';
 import { useForkRef } from '../utils/reactHelpers';
+import ListContext from '../List/ListContext';
 
 export const styles = theme => ({
   root: {
@@ -32,6 +33,9 @@ const ListItem = React.forwardRef(function ListItem(props, ref) {
 
 
   const children = React.Children.toArray(childrenProp);
+  const childContext = {
+
+  };
 
   const handleOwnRef = React.useCallback(instance => {
 
@@ -44,11 +48,17 @@ const ListItem = React.forwardRef(function ListItem(props, ref) {
 
 
   return (
-    <Compoent>
-      {children}
-    </Compoent>
+    <ListContext.Provider value={childContext}>
+      <Compoent>
+        {children}
+      </Compoent>
+    </ListContext.Provider>
   );
 
 });
+
+ListItem.propTypes = {
+  alignItems: PropTypes.oneOf(['flex-start', 'center']),
+};
 
 export default withStyles(styles, { name: 'MuiListItem' })(ListItem);

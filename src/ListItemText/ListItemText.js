@@ -3,12 +3,25 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import withStyles from '../styles/withStyles';
 import Typography from '../Typography';
+import ListContext from '../List/ListContext';
 
 export const styles = {
   root: {
     flex: '1 1 auto',
     minWidth: 0,
-  }
+    marginTop: 4,
+    marginBottom: 4,
+  },
+  multiline: {
+    marginTop: 6,
+    marginBottom: 6,
+  },
+  dense: {},
+  inset: {
+    paddingLeft: 56,
+  },
+  primary: {},
+  secondary: {},
 };
 
 const ListItemText = React.forwardRef(function ListItemText(props, ref) {
@@ -25,11 +38,16 @@ const ListItemText = React.forwardRef(function ListItemText(props, ref) {
     ...other
   } = props;
 
-  //const { dense } = React.useContext(ListItemText);
+  const { dense } = React.useContext(ListContext);
 
   let primary = primaryProp != null ? primaryProp : children;
   if (primary != null && primary.type !== Typography && !disableTypography) {
-    <Typography>
+    <Typography
+      variant={dense ? 'body2' : 'body1'}
+      component="span"
+      className={classes.primary}
+      {...primaryTypographyProps}
+    >
       {primary}
     </Typography>
   }
@@ -37,7 +55,11 @@ const ListItemText = React.forwardRef(function ListItemText(props, ref) {
   let secondary = secondaryProp;
   if (secondary != null && secondary.type !== Typography && !disableTypography) {
     secondary = (
-      <Typography>
+      <Typography
+        variant="body2"
+        className={classes.secondary}
+        {...secondaryTypographyProps}
+      >
         {secondary}
       </Typography>
     );
@@ -48,6 +70,11 @@ const ListItemText = React.forwardRef(function ListItemText(props, ref) {
     <div
       className={clsx(
         classes.root,
+        {
+          [classes.dense]: dense,
+          [classes.inset]: inset,
+          [classes.multiline]: primary && secondary,
+        },
         className,
       )}
       ref={ref}
