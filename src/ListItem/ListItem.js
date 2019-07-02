@@ -37,7 +37,35 @@ export const styles = theme => ({
   dense: {
     paddingTop: 4,
     paddingBottom: 4,
-  }
+  },
+  alignItemsFlexStart: {
+    alignItems: 'flex-start',
+  },
+  disabled: {},
+  divider: {
+    borderBottom: `1px solid ${theme.palette.divider}`,
+    backgroundClip: 'padding-box',
+  },
+  gutters: {
+    paddingLeft: 16,
+    paddingRight: 16,
+  },
+  button: {
+    transition: theme.transitions.create('background-color', {
+      duration: theme.transitions.duration.shortest,
+    }),
+    '&:hover': {
+      textDecoration: 'none',
+      backgroundColor: theme.palette.action.hover,
+      '@media (hover: none)': {
+        backgroundColor: 'transparent',
+      },
+    },
+  },
+  secondaryAction: {
+    paddingRight: 48,
+  },
+  selected: {},
 });
 
 const ListItem = React.forwardRef(function ListItem(props, ref) {
