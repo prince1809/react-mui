@@ -9,10 +9,10 @@ import Menu from '../src/Menu';
 import MenuItem from '../src/MenuItem';
 
 
-const SimpleMenu = withStyles(
+const SimplePopover = withStyles(
   theme => ({
-    root: {
-
+    typography: {
+      padding: theme.spacing(2),
     },
   }),
 )(({ classes }) => {
@@ -27,26 +27,18 @@ const SimpleMenu = withStyles(
     setAnchorEl(null);
   }
 
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
   return (
     <div className={classes.root}>
-      <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-        Open Menu
+      <Button aria-describedby={id} variant="contained" onClick={handleClick}>
+        Open Popover
       </Button>
-      <Menu
-        id="simple-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>My Account</MenuItem>
-        <MenuItem onClick={handleClose}>Logout</MenuItem>
-      </Menu>
+
     </div>
   )
 });
 
-storiesOf('Menu', module)
+storiesOf('Popover', module)
   .addDecorator(muiTheme())
-  .add('simple', () => <SimpleMenu />);
+  .add('simple', () => <SimplePopover />);

@@ -11,7 +11,18 @@ export const styles = {
 const Menu = React.forwardRef(function Menu(props, ref) {
   const {
     autoFocus: autoFocus,
+    children,
     classes,
+    disableAutoFocusItem = false,
+    MenuListProps = {},
+    onClose,
+    onEntering,
+    open,
+    PaperProps,
+    PopoverClasses,
+    theme,
+    transitionDuration = 'auto',
+    variant = 'selectedMenu',
     ...other
   } = props;
 
