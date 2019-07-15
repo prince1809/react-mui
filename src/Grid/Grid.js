@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import withStyles from '../styles/withStyles';
 import { keys as breakpointKeys } from '../styles/createBreakpoints';
-import { breakpoints } from '@material-ui/system';
+import requirePropFactory from '../utils/requirePropFactory';
 
 const SPACINGS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 const GRID_SIZES = ['auto', true, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
@@ -17,13 +17,18 @@ function generateGrid(globalStyles, theme, breakpoint) {
 
     if (size === true) {
       styles[key] == {
+        flexBasis: 0,
+        flexGrow: 1,
+        maxWidth: '100%',
       };
       return;
     }
 
     if (size === 'auto') {
       styles[key] = {
-
+        flexBasis: 'auto',
+        flexGrow: 0,
+        maxWidth: 'none',
       }
       return;
     }
@@ -31,7 +36,9 @@ function generateGrid(globalStyles, theme, breakpoint) {
     const width = `${Math.round((size / 12) * 10e7) / 10e5}%`;
 
     styles[key] = {
-
+      flexBasis: width,
+      flexGrow: 0,
+      maxWidth: width,
     };
   });
 
@@ -53,6 +60,11 @@ function generateGutter(theme, breakpoint) {
     }
 
     styles[`spacing-${breakpoint}-${spacing}`] = {
+      margin: -themeSpacing / 2,
+      width: `calc(100% + ${themeSpacing}px)`,
+      '& > $item': {
+        padding: themeSpacing / 2,
+      }
     };
 
   });
@@ -80,58 +92,58 @@ export const styles = theme => ({
     flexDirection: 'column',
   },
   'direction-xs-column-reverse': {
-
+    flexDirection: 'column-reverse',
   },
   'direction-xs-row-reverse': {
-
+    flexDirection: 'row-reverse',
   },
   'wrap-xs-nowrap': {
-
+    flexWrap: 'nowrap',
   },
   'wrap-xs-wrap-reverse': {
-
+    flexWrap: 'wrap-reverse',
   },
   'align-items-xs-center': {
-
+    alignItems: 'center',
   },
   'align-items-xs-flex-start': {
-
+    alignItems: 'flex-start',
   },
   'align-items-xs-flex-end': {
-
+    alignItems: 'flex-end',
   },
   'align-items-xs-baseline': {
-
+    alignItems: 'baseline',
   },
   'align-content-xs-center': {
-
+    alignContent: 'center',
   },
   'align-content-xs-flex-start': {
-
+    alignContent: 'flex-start',
   },
   'align-content-xs-flex-end': {
-
+    alignContent: 'flex-end',
   },
   'align-content-xs-space-between': {
-
+    alignContent: 'space-between',
   },
   'align-content-xs-space-around': {
-
+    alignContent: 'space-around',
   },
   'justify-xs-center': {
-
+    justifyContent: 'center',
   },
   'justify-xs-flex-end': {
-
+    justifyContent: 'flex-end',
   },
   'justify-xs-space-between': {
-
+    justifyContent: 'space-between',
   },
   'justify-xs-space-around': {
-
+    justifyContent: 'space-around',
   },
   'justify-xs-space-evenly': {
-
+    justifyContent: 'space-evenly',
   },
   ...generateGutter(theme, 'xs'),
   ...breakpointKeys.reduce((accumulator, key) => {
@@ -162,7 +174,7 @@ const Grid = React.forwardRef((props, ref) => {
     ...other
   } = props;
 
-  const clasName = clsx(
+  const className = clsx(
     classes.root,
     {
       [classes.container]: container,
@@ -183,7 +195,7 @@ const Grid = React.forwardRef((props, ref) => {
     classNameProp,
   );
 
-  return <Component className={clasName} ref={ref} {...other} />;
+  return <Component className={className} ref={ref} {...other} />;
 })
 
 Grid.propTypes = {
@@ -192,8 +204,40 @@ Grid.propTypes = {
     'stretch',
     'center',
   ]),
+  alignItems: PropTypes.oneOf(['flex-start', 'center', 'flex-end', 'stretch', 'baseline']),
+  children: PropTypes.node,
+  classes: PropTypes.object.isRequired,
+  className: PropTypes.string,
+  component: PropTypes.elementType,
+  container: PropTypes.bool,
+  direction: PropTypes.oneOf(['row', 'row-reverse', 'column', 'column-reverse']),
+  item: PropTypes.bool,
+  justify: PropTypes.oneOf([
+    'flex-start',
+    'center',
+    'flex-end',
+    'space-between',
+    'space-around',
+    'space-evenly',
+  ]),
+  lg: PropTypes.oneOf([false, 'auto', true, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]),
+  md: PropTypes.oneOf([false, 'auto', true, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]),
+  sm: PropTypes.oneOf([false, 'auto', true, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]),
+  spacing: PropTypes.oneOf(SPACINGS),
+  wrap: PropTypes.oneOf(['nowrap', 'wrap', 'wrap-reverse']),
+  xl: PropTypes.oneOf([false, 'auto', true, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]),
+  xs: PropTypes.oneOf([false, 'auto', true, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]),
+  zeroMinWidth: PropTypes.bool,
 };
 
-const styledGrid = withStyles(styles, { name: 'MuiGrid' })(Grid);
+const StyledGrid = withStyles(styles, { name: 'MuiGrid' })(Grid);
 
-export default styledGrid;
+if (process.env.NODE_ENV !== 'production') {
+  const requirePorp = requirePropFactory('Grid');
+  StyledGrid.propTypes = {
+    ...StyledGrid.propTypes,
+    alignContent: requirePorp('container'),
+  }
+}
+
+export default StyledGrid;
