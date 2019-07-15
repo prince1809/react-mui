@@ -8,7 +8,7 @@ import Typography from '../src/Typography';
 import Grid from '../src/Grid';
 
 
-const DefaultPaper = withStyles(
+const DefaultGrids = withStyles(
   theme => ({
     root: {
       padding: theme.spacing(3, 2),
@@ -35,6 +35,48 @@ const DefaultPaper = withStyles(
   );
 });
 
+const FluidGrids = withStyles(
+  theme => ({
+    root: {
+      flexGrow: 1,
+    },
+    paper: {
+      padding: theme.spacing(2),
+      textAlign: 'center',
+      color: theme.palette.text.secondary,
+    },
+  }),
+)(({ classes }) => {
+  return (
+    <div className={classes.root}>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <Paper className={classes.paper}>xs=12</Paper>
+        </Grid>
+        <Grid item xs={6}>
+          <Paper className={classes.paper}>xs=6</Paper>
+        </Grid>
+        <Grid item xs={6}>
+          <Paper className={classes.paper}>xs=6</Paper>
+        </Grid>
+        <Grid item xs={3}>
+          <Paper className={classes.paper}>xs=3</Paper>
+        </Grid>
+        <Grid item xs={3}>
+          <Paper className={classes.paper}>xs=3</Paper>
+        </Grid>
+        <Grid item xs={3}>
+          <Paper className={classes.paper}>xs=3</Paper>
+        </Grid>
+        <Grid item xs={3}>
+          <Paper className={classes.paper}>xs=3</Paper>
+        </Grid>
+      </Grid>
+    </div>
+  );
+})
+
 storiesOf('Grids', module)
   .addDecorator(muiTheme())
-  .add('default', () => <DefaultPaper />);
+  .add('default', () => <DefaultGrids />)
+  .add('fluid', () => <FluidGrids />);
