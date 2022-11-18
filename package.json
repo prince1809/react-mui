@@ -37,7 +37,7 @@
     "@storybook/addon-actions": "^5.1.8",
     "@storybook/addon-links": "^5.1.8",
     "@storybook/addons": "^5.1.8",
-    "@storybook/react": "^5.1.8",
+    "@storybook/react": "^6.5.13",
     "babel-loader": "^8.0.6",
     "chai": "^4.2.0",
     "sinon": "^7.3.2"
